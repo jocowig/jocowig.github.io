@@ -1,4 +1,10 @@
-AuthType Basic  
-AuthName "restricted area"  
-AuthUserFile /devspace/.htpasswd  
-require valid-user
+<Files ~ "^\.(htaccess|htpasswd)$">
+deny from all
+</Files>
+Options Indexes
+AuthUserFile /devspace/htpasswd
+AuthGroupFile /dev/null
+AuthName "Please enter your ID and password"
+AuthType Basic
+require valid-user 
+order deny,allow
