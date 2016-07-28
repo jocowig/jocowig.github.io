@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevArea</title>
+<head>
+<SCRIPT>
+if(isset(session['isUser'])){
+ if(session['isUser']==true){
+  
+ }
+ else{
+  window.location = "/devspace/index.html";
+ }
+}
+else{
+   window.location = "/devspace/index.html";
+}
+</SCRIPT>
+</head>
+<body>
+
+<input type="button" class="btn btn-default btn-lg" value="Log In" onClick="passWord()">
+<p>Made it</p><body>
+</html>
