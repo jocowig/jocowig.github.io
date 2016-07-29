@@ -8,26 +8,108 @@
 <head>
 <script src="./js/howler.core.js"></script>
 <script>
-var sound = new Howl({
+var bgMusic = new Howl({
   src: ['./audio/bgMusic.wav', './audio/bgMusic.mp3', './audio/bgMusic.m4a'],
-  preload : false
+  preload : false,
+  loop: true
+});
+var jingle = new Howl({
+  src: ['./audio/jingleBells.wav', './audio/jingleBells.mp3'],
+});
+var hohoho = new Howl({
+  src: ['./audio/hohoho.wav', './audio/hohoho.mp3'],
+});
+var puckHit = new Howl({
+src: ['./audio/puckHit.wav','./audio/puckHit.mp3']
+});
+var puckHit2 = new Howl({
+src: ['./audio/puckHit2.wav','./audio/puckHit2.mp3']
+});
+var puckHit3 = new Howl({
+src: ['./audio/puckHit3.wav','./audio/puckHit3.mp3']
+});
+var jump = new Howl({
+src: ['./audio/jump.wav','./audio/jump.mp3']
+});
+var jump2 = new Howl({
+src: ['./audio/jump2.wav','./audio/jump2.mp3']
+});
+var crash = new Howl({
+src: ['./audio/crash.wav','./audio/crash.mp3']
+});
+var crash2 = new Howl({
+src: ['./audio/crash2.wav','./audio/crash2.mp3']
+});
+var match3 = new Howl({
+src: ['./audio/3match.wav','./audio/3match.mp3']
+});
+var match4 = new Howl({
+src: ['./audio/4match.wav','./audio/4match.mp3']
+});
+var match5 = new Howl({
+src: ['./audio/5match.wav','./audio/5match.mp3']
+});
+var match6 = new Howl({
+src: ['./audio/6match.wav','./audio/6match.mp3']
 });
 </script>
 </head>
 <body>
 <SCRIPT>
-function preload(){
+function preload(sound){
 sound.load();
 }
-function playSound() {
+function playSound(sound) {
 sound.play();
 }
-function pauseSound() {
+function pauseSound(sound) {
 sound.pause();
 }
 </SCRIPT>
-<input type="button" class="btn btn-default btn-lg" value="Preload" onClick="preload()">
-<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound()">
-<input type="button" class="btn btn-default btn-lg" value="Pause Sound" onClick="pauseSound()">
-<p>Howler</p><body>
+<h1>Build-a-Bear Board Game Sound Effects Options</h1>
+<p>
+Background Music
+<input type="button" class="btn btn-default btn-lg" value="Preload" onClick="preload(bgMusic)">
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(bgMusic)">
+<input type="button" class="btn btn-default btn-lg" value="Pause Sound" onClick="pauseSound(bgMusic)">
+</p>
+<p>
+Jingle Bells - Star Collect
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(jingle)">
+</p>
+<p>
+Hohoho - Present/Piece Collect
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(hohoho)">
+</p>
+<p>
+Plinko Puck Hit - Option 1
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(puckHit)">
+Option 2
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(puckHit2)">
+Option 3
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(puckHit3)">
+</p>
+Jump Running/Platform Games - Option 1
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(jump)">
+Option 2
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(jump2)">
+</p>
+<p>
+Crash Running Game - Option 1
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(crash)">
+Option 2 
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(crash2)">
+</p>
+<p>
+Match Three Game - Match 3
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(match3)">
+Match 4
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(match4)">
+Match 5
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(match5)">
+Match 6
+<input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(match6)">
+</p>
+
+<body>
 </html>
