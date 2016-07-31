@@ -54,7 +54,7 @@ var actions = {
 		count:0,
 		messages: {first:"", second:"",third:"",base:"You shout for help as loud as you can"},
 		xPos: centerX,
-		yPos: centerY-gameHeight/20,
+		yPos: centerY-gameHeight/10,
 		breathCost:2,
 		sanityCost:-2,
 		min:0,
@@ -68,7 +68,7 @@ var actions = {
 		count:0,
 		messages: {first:"", second:"",third:"",base:"You let loose a desperate, terrified scream"},
 		xPos: centerX,
-		yPos: centerY-2*gameHeight/20,
+		yPos: centerY-2*gameHeight/10,
 		breathCost:4,
 		sanityCost:-6,
 		min:0,
@@ -82,7 +82,7 @@ var actions = {
 		count:0,
 		messages: {first:"You feel something shift slightly", second:"The walls are weakening",third:"The walls are now loose",base:"You writhe against the walls"},
 		xPos: centerX,
-		yPos: centerY+gameHeight/20,
+		yPos: centerY+gameHeight/10,
 		breathCost:2,
 		sanityCost:0,
 		min:0,
@@ -96,7 +96,7 @@ var actions = {
 		count:0,
 		messages: {first:"You feel the wall crack a bit", second:"You've kicked a good size dent in the wall",third:"You've kicked a hole in the wall",base:"You kick at the walls"},
 		xPos: centerX,
-		yPos: centerY+2*gameHeight/20,
+		yPos: centerY+2*gameHeight/10,
 		breathCost:0,
 		sanityCost:0,
 		min:0,
@@ -110,7 +110,7 @@ var actions = {
 		count:0,
 		messages: {first:"You scrape a little bit of the walls away", second:"You've scraped a good chunk of the walls away",third:"You've scraped away as much as you can",base:"You scratch at the walls"},
 		xPos: centerX,
-		yPos: centerY+3*gameHeight/20,
+		yPos: centerY+3*gameHeight/10,
 		breathCost:2,
 		sanityCost:1,
 		min:0,
@@ -124,7 +124,7 @@ var actions = {
 		count:0,
 		messages: {first:"", second:"",third:"",base:"You break down crying in your hopelessness"},
 		xPos: centerX,
-		yPos: centerY-3*gameHeight/20,
+		yPos: centerY-3*gameHeight/10,
 		breathCost:8,
 		sanityCost:-15,
 		min:0,
@@ -386,7 +386,7 @@ function results(){
 	if(progress["Move"] == 3 && progress["Kick"] == 3 && progress["Scratch"] == 3){
 		addMessage("The boards give way beneath you and you can feel earth your fingertips");
 		breathsAvailable= startBreaths;
-		addButton("Dig", game.world.centerX, game.world.centerY+4*game.world.height/20);
+		addButton("Dig", game.world.centerX + game.world.width/4, game.world.centerY);
 	}
 }
 function dig(){
