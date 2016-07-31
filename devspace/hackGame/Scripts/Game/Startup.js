@@ -140,7 +140,7 @@ var breathsAvailable = startBreaths;
 	
 function preload() {
 	// game.load.bitmapFont('silkscreen', 'assets/fonts/bitmapFonts/font.png', 'assets/fonts/bitmapFonts/font.fnt');
-	game.load.image('title','assets/title.png');
+	game.load.image('title','assets/Title.png');
 }
 
 function create() {
