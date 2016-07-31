@@ -1,0 +1,35 @@
+* {
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	
+	-ms-touch-action: none;
+	
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+*:not(input, textarea) {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+html, body {
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	background-color: #000000;
+}
+/*
+@font-face {
+	font-family: "SkaterGirlsRock_1";
+	src: url("Assets/Fonts/SkaterGirlsRock_1.ttf") format("truetype");
+}
+*/
