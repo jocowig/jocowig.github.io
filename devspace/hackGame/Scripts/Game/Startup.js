@@ -10,6 +10,10 @@ var game = new Phaser.Game({
 	preload: preload, 
 	create: create, 
 	update: update });
+var centerX = 960/2;
+var centerY = 540/2;
+var gameWidth = 960;
+var gameHeight = 540;
 var gameState = 0;
 var gameTimer = 1;
 var startButton;
@@ -23,9 +27,114 @@ var startBreaths = 20;
 var baseBreathValue = 20;
 var sanityBaseValue = 50;
 var sanityTimer;
+var digCounter = 0;
 var showBreathMessage = [];
 var showSanityMessage = [];
 var actions = [];
+var progress = {};
+var actionNames = ["Breathe", "Yell", "Scream", "Move", "Kick", "Scratch", "Cry"];
+var progressNames = ["first","second","third"];
+var actions = {
+	Breathe:{
+		name: "Breathe",
+		count:0,
+		messages: {first:"", second:"",third:"",base:"You draw a ragged breath"},
+		xPos: centerX,
+		yPos: centerY,
+		breathCost:0,
+		sanityCost:0,
+		min:0,
+		max:0,
+		conditions: {first:{Breathe:1, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0},
+					second:{Breathe:1, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0},
+					third:{Breathe:1, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0}}
+	},
+	Yell:{
+		name: "Yell",
+		count:0,
+		messages: {first:"", second:"",third:"",base:"You shout for help as loud as you can"},
+		xPos: centerX,
+		yPos: centerY-gameHeight/20,
+		breathCost:2,
+		sanityCost:-2,
+		min:0,
+		max:0,
+		conditions: {first:{Breathe:0, Yell:1, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0},
+					second:{Breathe:0, Yell:1, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0},
+					third:{Breathe:0, Yell:1, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0}}
+	},
+	Scream:{
+		name: "Scream",
+		count:0,
+		messages: {first:"", second:"",third:"",base:"You let loose a desperate, terrified scream"},
+		xPos: centerX,
+		yPos: centerY-2*gameHeight/20,
+		breathCost:4,
+		sanityCost:-6,
+		min:0,
+		max:0,
+		conditions: {first:{Breathe:0, Yell:0, Scream:1, Move:0, Kick:0, Scratch:0, Cry:0},
+					second:{Breathe:0, Yell:0, Scream:1, Move:0, Kick:0, Scratch:0, Cry:0},
+					third:{Breathe:0, Yell:0, Scream:1, Move:0, Kick:0, Scratch:0, Cry:0}}
+	},
+	Move:{
+		name: "Move",
+		count:0,
+		messages: {first:"You feel something shift slightly", second:"The walls are weakening",third:"The walls are now loose",base:"You writhe against the walls"},
+		xPos: centerX,
+		yPos: centerY+gameHeight/20,
+		breathCost:2,
+		sanityCost:0,
+		min:0,
+		max:4,
+		conditions: {first:{Breathe:0, Yell:0, Scream:0, Move:2, Kick:0, Scratch:0, Cry:0},
+					second:{Breathe:0, Yell:0, Scream:0, Move:8, Kick:0, Scratch:0, Cry:0},
+					third:{Breathe:0, Yell:0, Scream:0, Move:15, Kick:0, Scratch:0, Cry:0}}
+	},
+	Kick:{
+		name: "Kick",
+		count:0,
+		messages: {first:"You feel the wall crack a bit", second:"You've kicked a good size dent in the wall",third:"You've kicked a hole in the wall",base:"You kick at the walls"},
+		xPos: centerX,
+		yPos: centerY+2*gameHeight/20,
+		breathCost:0,
+		sanityCost:0,
+		min:0,
+		max:8,
+		conditions: {first:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:8, Scratch:0, Cry:0},
+					second:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:40, Scratch:0, Cry:0},
+					third:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:80, Scratch:0, Cry:0}}
+	},
+	Scratch:{
+		name: "Scratch",
+		count:0,
+		messages: {first:"You scrape a little bit of the walls away", second:"You've scraped a good chunk of the walls away",third:"You've scraped away as much as you can",base:"You scratch at the walls"},
+		xPos: centerX,
+		yPos: centerY+3*gameHeight/20,
+		breathCost:2,
+		sanityCost:1,
+		min:0,
+		max:2,
+		conditions: {first:{Breathe:0, Yell:0, Scream:0, Move:2, Kick:0, Scratch:2, Cry:0},
+					second:{Breathe:0, Yell:0, Scream:0, Move:2, Kick:0, Scratch:10, Cry:0},
+					third:{Breathe:0, Yell:0, Scream:0, Move:2, Kick:0, Scratch:20, Cry:0}}
+	},
+	Cry:{
+		name: "Cry",
+		count:0,
+		messages: {first:"", second:"",third:"",base:"You break down crying in your hopelessness"},
+		xPos: centerX,
+		yPos: centerY-3*gameHeight/20,
+		breathCost:8,
+		sanityCost:-15,
+		min:0,
+		max:0,
+		conditions: {first:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:1},
+					second:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:1},
+					third:{Breathe:0, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:1}}
+	}
+};
+var times = [5,5,10,10,10,10,10];
 var nextButton;
 var breathsAvailable = startBreaths;
 	
@@ -60,7 +169,6 @@ function update() {
 		var enterTween = game.add.tween(title).to( { alpha: 1 }, 2000 *(60*game.time.physicsElapsed), "Linear");
 		enterTween.start();
 		gameState++;
-		console.log("Finished!");
 		enterTween.onComplete.add(createStartButton,this);
 	}
 	if(gameState == 2){
@@ -68,56 +176,25 @@ function update() {
 	if(gameState == 3){
 		gameTimer -= 1*game.time.physicsElapsed;
 		if(gameTimer<=0){
-			switch(nextButton){
-				case "BREATHE":
-					addButton(nextButton, game.world.centerX, game.world.centerY, breathe);
-					nextButton = "YELL";
-					gameTimer = 5;
-					break;
-				case "YELL":
-					addButton(nextButton, game.world.centerX, (game.world.centerY-game.world.height/20), yell);
-					nextButton = "SCREAM";
-					gameTimer = 5;
-					break;
-				case "SCREAM":
-					addButton(nextButton, game.world.centerX, (game.world.centerY-2*(game.world.height/20)), scream);
-					nextButton = "MOVE";
-					gameTimer = 10;
-					break;
-				case "MOVE":
-					addButton(nextButton, game.world.centerX, (game.world.centerY+(game.world.height/20)), move);
-					nextButton = "KICK";
-					gameTimer = 10;
-					break;
-				case "KICK":
-					addButton(nextButton, game.world.centerX, (game.world.centerY+2*(game.world.height/20)), kick);
-					nextButton = "SCRATCH";
-					gameTimer = 10;
-					break;
-				case "SCRATCH":
-					addButton(nextButton, game.world.centerX, (game.world.centerY+3*(game.world.height/20)), scratch);
-					nextButton = "CRY";
-					gameTimer = 10;
-					break;
-				case "CRY":
-					addButton(nextButton, game.world.centerX, (game.world.centerY-3*(game.world.height/20)), cry);
-					nextButton = "";
-					gameTimer = 10;
-					break;
-			}
+			addButton(actions[actionNames[nextButton]].name, actions[actionNames[nextButton]].xPos, actions[actionNames[nextButton]].yPos);
+			nextButton++;
+			gameTimer = times[nextButton];
 		}
 	}
 	if(gameStarted){
 		breathTimer -= 1*game.time.physicsElapsed;
 		sanityTimer -= 1*game.time.physicsElapsed;
+		if(sanityTimer<0){
+			sanityTimer = 0;
+		}
 		if(sanityTimer > 0){
 			enableDisabledButtons();
 		}
 		if(sanityTimer <=0 && showSanityMessage[0]){
 			addMessage("You've Lost Your Mind");
-			disable("MOVE");
-			disable("KICK");
-			disable("SCRATCH");
+			disable("Move");
+			disable("Kick");
+			disable("Scratch");
 			showSanityMessage[0] = false;
 		}
 		else if(sanityTimer <= 5 && showSanityMessage[5]){
@@ -158,14 +235,10 @@ function resetGame(){
 	for(item in buttons){
 		fadeOut(buttons[item],0);
 	}
-	for(item in actions){
-		actions[item] = 0;
-	}
 	messageText.forEach(fadeOut);
 	createMessageStatus();
-	nextButton = "BREATHE";
 }
-function startGame(item){
+function startGame(){
 	buttons["start"].visible = false;
 	buttons["start"].events.onInputDown.remove(startGame, this);
 	var exitTween = game.add.tween(title).to({alpha: 0}, 2000 * (60*game.time.physicsElapsed),"Linear");
@@ -178,7 +251,9 @@ function startGame(item){
 	gameStarted = true;
 	breathTimer = baseBreathValue;
 	sanityTimer = sanityBaseValue;
-	nextButton = "BREATHE";
+	nextButton = 0;
+	digCounter = 0;
+	progress = {Breathe:0, Yell:0, Scream:0, Move:0, Kick:0, Scratch:0, Cry:0};
 	createMessageStatus();
 	},this);
 }
@@ -195,16 +270,18 @@ function addMessage(message){
 	messageText[messageCount] = game.add.text(game.world.width/20, game.world.height- game.world.height/6, message, { font: "14px Arial", fill: "#ffffff", align: "Left" });
 }
 
-function addButton(buttonText, x, y, outputAction){
+function addButton(buttonText, x, y){
 	buttons[buttonText] = game.add.text(x, y, buttonText, { font: "25px Arial", fill: "#ffffff", align: "center" });
 	buttons[buttonText].anchor.setTo(0.5,0.5);
 	buttons[buttonText].inputEnabled = true;
-	buttons[buttonText].events.onInputDown.add(outputAction, this);
+	buttons[buttonText].input.useHandCursor = true;
+	buttons[buttonText].events.onInputDown.add(action, {buttonType:buttonText});
 	return buttons[buttonText];
 }
 
 function fadeOut(item, index){
 	if(item != null){
+		item.inputEnabled = false;
 		var tween = game.add.tween(item).to({alpha: 0}, 2000 * (60*game.time.physicsElapsed),"Linear");
 		tween.start();
 		tween.onComplete.add(function finishedFadeOut(){game.world.remove(item);},this);
@@ -226,13 +303,16 @@ function enableDisabledButtons(){
 	}
 }
 
+function getRandomNumberInRange(min, max){
+	 return Math.random() * (max - min) + min;
+}
+
 function breathe(){
-	addMessage("You drew a ragged breath");
 	breathTimer = breathsAvailable/startBreaths * baseBreathValue;
 	breathsAvailable--;
-	buttons["BREATHE"].alpha = breathsAvailable/startBreaths;
-	if(buttons["BREATHE"].alpha <= 0){
-		game.world.remove(buttons["BREATHE"]);
+	buttons["Breathe"].alpha = breathsAvailable/startBreaths;
+	if(buttons["Breathe"].alpha <= 0){
+		game.world.remove(buttons["Breathe"]);
 	}
 	resetBreathMessageStatus();
 }
@@ -261,48 +341,71 @@ function resetBreathMessageStatus(){
 		} 
 	}
 }
-function yell(){
-	addMessage("You yell for help at the top of your lungs");
-	sanityTimer += 1;
-	breathTimer -= 2;
-}
-function scream(){
-	addMessage("You let loose a desperate, terrified scream");
-	sanityTimer += 2;
-	breathTimer -= 4;
-}
-function move(){
-	if(actions["Moves"] == null){
-		actions["Moves"] = 1;
+
+function action(){
+	if(this.buttonType == "start"){
+		startGame();
+		return;
 	}
-	else{
-		actions["Moves"] +=1;
-		addMessage("You try to move, but are completely stuck");
-		breathTimer -= 2;
+	if(this.buttonType == "Dig"){
+		dig();
+		return;
+	}
+	var randomIndex = getRandomNumberInRange(actions[this.buttonType].min,actions[this.buttonType].max);
+	addMessage(actions[this.buttonType].messages.base);
+	actions[this.buttonType].count +=randomIndex;
+	if(conditionsMet(this.buttonType)){
+		addMessage(actions[this.buttonType].messages[progressNames[progress[this.buttonType]]]);
+		progress[this.buttonType]++;
+		results();
+	}
+	breathTimer -= actions[this.buttonType].breathCost;
+	sanityTimer -= actions[this.buttonType].sanityCost;
+	if(this.buttonType == "Breathe")
+		breathe();
+}
+
+function conditionsMet(name){
+	for(actionIndex in actions){
+		if(actions[actionIndex].count < actions[name].conditions[progressNames[progress[name]]][actionIndex]){
+			return false;
+		}
+	}
+	return true;
+}
+
+function results(){
+	if(progress["Move"] == 1 && progress["Kick"] == 1 && progress["Scratch"] == 1){
+		addMessage("You've Managed to free some space for yourself and have opened a small air pocket");
+		breathsAvailable = startBreaths;
+	}
+	if(progress["Move"] == 2 && progress["Kick"] == 2 && progress["Scratch"] == 2){
+		addMessage("Another air pocket has opened and you can bend your arms");
+		breathsAvailable = startBreaths;
+	}
+	if(progress["Move"] == 3 && progress["Kick"] == 3 && progress["Scratch"] == 3){
+		addMessage("The boards give way beneath you and you can feel earth your fingertips");
+		breathsAvailable= startBreaths;
+		addButton("Dig", game.world.centerX, game.world.centerY+4*game.world.height/20);
 	}
 }
-function kick(){
-	if(actions["Kicks"] == null){
-		actions["Kicks"] = 1;
+function dig(){
+	digCounter++;
+	addMessage("You frantically dig")
+	if(digCounter == 5){
+		addMessage("The earth is giving way more easily now");
 	}
-	else{
-		actions["Kicks"] +=1;
-		addMessage("You kick at the walls but they do not give");
-		breathTimer -= 4;
+	if(digCounter == 10){
+		addMessage("The earth above you is starting to cave in");
+		breathsAvailable = breathsAvailable/2;
+	}
+	if(digCounter == 15){
+		addMessage("There is a harder surface here");
+		breathsAvailable = breathsAvailable/2;
+	}
+	if(digCounter == 20){
+		addMessage("You break though the hard surface, and fall...");
+		resetGame();
 	}
 }
-function scratch(){
-	if(actions["Scratches"] == null){
-		actions["Scratches"] = 1;
-	}
-	else{
-		actions["Scratches"] +=1;
-		addMessage("You scratch at the walls, scraping away at them a little bit.");
-		breathTimer -= 1;
-	}
-}
-function cry(){
-	sanityTimer += 5;  
-	addMessage("You break down and cry in hopelessness, but manage to pull yourself together");
-	breathTimer -= 4;
-}
+
