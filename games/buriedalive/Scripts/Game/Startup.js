@@ -227,7 +227,7 @@ function update() {
 }
 
 function createStartButton(item){
-	addButton("start", game.world.centerX, game.world.centerY, startGame);
+	addButton("Start", game.world.centerX, game.world.centerY, startGame);
 }
 function resetGame(){
 	gameTimer = 3;
@@ -240,15 +240,15 @@ function resetGame(){
 	createMessageStatus();
 }
 function startGame(){
-	buttons["start"].visible = false;
-	buttons["start"].events.onInputDown.remove(startGame, this);
+	buttons["Start"].visible = false;
+	buttons["Start"].events.onInputDown.remove(startGame, this);
 	var exitTween = game.add.tween(title).to({alpha: 0}, 2000 * (60*game.time.physicsElapsed),"Linear");
 	exitTween.start();
 	exitTween.onComplete.add(function fadeComplete(){
 	game.world.remove(title);
 	gameState++;
 	stageStatus = 0;
-	addMessage("It's Dark");
+	addMessage("It's dark");
 	gameTimer = 2;
 	gameStarted = true;
 	breathTimer = baseBreathValue;
@@ -345,7 +345,7 @@ function resetBreathMessageStatus(){
 }
 
 function action(){
-	if(this.buttonType == "start"){
+	if(this.buttonType == "Start"){
 		startGame();
 		return;
 	}
