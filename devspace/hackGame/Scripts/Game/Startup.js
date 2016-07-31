@@ -27,6 +27,7 @@ var startBreaths = 20;
 var baseBreathValue = 20;
 var sanityBaseValue = 50;
 var sanityTimer;
+var stageStatus;
 var digCounter = 0;
 var showBreathMessage = [];
 var showSanityMessage = [];
@@ -246,6 +247,7 @@ function startGame(){
 	exitTween.onComplete.add(function fadeComplete(){
 	game.world.remove(title);
 	gameState++;
+	stageStatus = 0;
 	addMessage("It's Dark");
 	gameTimer = 2;
 	gameStarted = true;
@@ -354,10 +356,12 @@ function action(){
 	var randomIndex = getRandomNumberInRange(actions[this.buttonType].min,actions[this.buttonType].max);
 	addMessage(actions[this.buttonType].messages.base);
 	actions[this.buttonType].count +=randomIndex;
-	if(conditionsMet(this.buttonType)){
-		addMessage(actions[this.buttonType].messages[progressNames[progress[this.buttonType]]]);
-		progress[this.buttonType]++;
-		results();
+	if(progress[this.buttonType]<3){
+		if(conditionsMet(this.buttonType)){
+			addMessage(actions[this.buttonType].messages[progressNames[progress[this.buttonType]]]);
+			progress[this.buttonType]++;
+			results();
+		}
 	}
 	breathTimer -= actions[this.buttonType].breathCost;
 	sanityTimer -= actions[this.buttonType].sanityCost;
@@ -375,18 +379,21 @@ function conditionsMet(name){
 }
 
 function results(){
-	if(progress["Move"] == 1 && progress["Kick"] == 1 && progress["Scratch"] == 1){
+	if(progress["Move"] >=1 && progress["Kick"] >= 1 && progress["Scratch"] >= 1 && (stageStatus == 0)){
 		addMessage("You've Managed to free some space for yourself and have opened a small air pocket");
 		breathsAvailable = startBreaths;
+		stageStatus++;
 	}
-	if(progress["Move"] == 2 && progress["Kick"] == 2 && progress["Scratch"] == 2){
+	if(progress["Move"] >= 2 && progress["Kick"] >= 2 && progress["Scratch"] >= 2 && (stageStatus == 1)){
 		addMessage("Another air pocket has opened and you can bend your arms");
 		breathsAvailable = startBreaths;
+		stageStatus++;
 	}
-	if(progress["Move"] == 3 && progress["Kick"] == 3 && progress["Scratch"] == 3){
+	if(progress["Move"] >= 3 && progress["Kick"] >= 3 && progress["Scratch"] >= 3 && (stageStatus == 2)){
 		addMessage("The boards give way beneath you and you can feel earth your fingertips");
 		breathsAvailable= startBreaths;
 		addButton("Dig", game.world.centerX + game.world.width/4, game.world.centerY);
+		stageStatus++;
 	}
 }
 function dig(){
