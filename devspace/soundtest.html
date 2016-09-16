@@ -65,6 +65,9 @@ sound.play();
 function pauseSound(sound) {
 sound.pause();
 }
+function unload(sound){
+sound.unload();
+}
 </SCRIPT>
 <h1>Build-a-Bear Board Game Sound Effects Options</h1>
 <p>
@@ -72,6 +75,7 @@ Background Music
 <input type="button" class="btn btn-default btn-lg" value="Preload" onClick="preload(bgMusic)">
 <input type="button" class="btn btn-default btn-lg" value="Play Sound" onClick="playSound(bgMusic)">
 <input type="button" class="btn btn-default btn-lg" value="Pause Sound" onClick="pauseSound(bgMusic)">
+<input type="button" class="btn btn-default btn-lg" value="Unload" onClick="unload(bgMusic)">
 </p>
 <p>
 Jingle Bells - Star Collect
