@@ -17,10 +17,10 @@
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
     <div class="collapse navbar-collapse" id="defaultNavbar1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="civHack17/index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"> </span> Home<span class="sr-only">(current)</span></a></li>
-        <li><a href="civHack17/createProject.html">Create a Project</a></li>
-        <li><a href="civHack17/myProjects.html">My Projects</a></li>
-        <li><a href="civHack17/myProfile.html">My Profile</a></li>
+        <li class="active"><a href="./index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"> </span> Home<span class="sr-only">(current)</span></a></li>
+        <li><a href="./createProject.html">Create a Project</a></li>
+        <li><a href="./myProjects.html">My Projects</a></li>
+        <li><a href="./myProfile.html">My Profile</a></li>
       </ul>
       <ul class="dropdown-menu" role="menu">
         <li><a href="#">Action</a></li>
@@ -33,6 +33,26 @@
   </div>
   </div>
 </nav>
+<div class="createProject">
+	<form>
+	  What are we calling this?<br> <input type="text" name="projectName">
+	  <br>
+	  When is it happening?<br><input type="datetime-local" name="startTime">
+	<br>
+	Is it at one of these places?<br> 
+	<select>
+	  <option value="volvo">Gleaners Food Pantry</option>
+	  <option value="saab">Youth Fitness Mentor: National Institute for Fitness and Sport (NIFS)</option>
+	  <option value="opel">School on Wheels</option>
+	  <option value="audi">Market Food Pantry: Mary Rigg Neighborhood Center (MRNC)</option>
+	  <option value="audi">Indiana State Museum and Historic Sites</option>
+	  <option value="audi">Girls Inc.</option>
+	</select>
+	<br>
+	if not then where?<br>
+	<input type="text" name="projectLocation">
+	</form>
+</div>
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </body>
