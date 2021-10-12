@@ -46,19 +46,46 @@
   <div class="row text-center">
     <div class="col-md-6 col-md-offset-3">Visualization of John Snow's Map</div>
 	<div id = "map" style = "width: 900px; height: 580px"></div>
-<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-	  <script>
-		 var londonLocation = {
-			center: [51.5074, 0.1278],
-			zoom: 10
-		 }
-		 
-		 var map = new L.map('map', londonLocation);
-		
-		 var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-		 
-		 map.addLayer(layer);
-	  </script>
+	<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script>
+	 var londonLocation = {
+		center: [51.5074, 0.1278],
+		zoom: 10
+	 }
+	 
+	 var map = new L.map('map', londonLocation);
+	
+	 var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	 
+	 map.addLayer(layer);
+	 
+	 
+  </script>
+  <script src="https://d3js.org/d3.v5.js"></script>
+<svg id="svg1" style="margin: 0 auto; display: block;"></svg>
+<script type="text/javascript" src="data/streets.json"></script>
+<script>   
+var request = new XMLHttpRequest();
+   request.open("GET", "./data/streets.json", false);
+   request.send(null)
+   var streets = JSON.parse(request.responseText);
+   alert (my_JSON_object.result[0]);
+    
+	let svg = d3.select('#svg1')
+        .attr('width', 400)
+        .attr('height', 400)
+        .style('background-color', 'black');
+
+for(var street in streets) {
+    svg.append('line')
+        .style("stroke", "lightgreen")
+        .style("stroke-width", 10)
+        .attr("x1", streets[street][0].x)
+        .attr("y1", streets[street][0].y)
+        .attr("x2", streets[street][1].x)
+        .attr("y2", streets[street][1].y);  
+}		
+</script>
 
   </div>
   <hr>
