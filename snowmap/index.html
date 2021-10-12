@@ -8,6 +8,9 @@
 
 <link href="../css/bootstrap.css" rel="stylesheet">
 <link href="../css/siteStyles.css" rel="stylesheet">
+<link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
 </head>
 <body>
@@ -17,7 +20,7 @@
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
     <div class="collapse navbar-collapse" id="defaultNavbar1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"> </span> Home<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="/snowmap/index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"> </span> Visualization<span class="sr-only">(current)</span></a></li>
         <li><a href="/snowmap/documentation.html">Documentation</a></li>
         <li><a href="/snowmap/video.html">Video Explanation</a></li>
       </ul>
@@ -42,7 +45,21 @@
 <div class="container">
   <div class="row text-center">
     <div class="col-md-6 col-md-offset-3">Visualization of John Snow's Map</div>
-	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<div id = "map" style = "width: 900px; height: 580px"></div>
+<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	  <script>
+		 var londonLocation = {
+			center: [51.5074, 0.1278],
+			zoom: 10
+		 }
+		 
+		 var map = new L.map('map', londonLocation);
+		
+		 var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+		 
+		 map.addLayer(layer);
+	  </script>
+
   </div>
   <hr>
 
