@@ -43,22 +43,7 @@
 <div class="container">
   <div class="row text-center">
     <div class="col-md-6 col-md-offset-3">Visualization of John Snow's Map</div>
-	<!-- <div id = "map" style = "width: 900px; height: 580px"></div>
-	<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-  <script>
-	 var londonLocation = {
-		center: [51.5074, 0.1278],
-		zoom: 10
-	 }
-	 
-	 var map = new L.map('map', londonLocation);
-	
-	 var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-	 
-	 map.addLayer(layer);
-	 
-	 
-  </script> -->
+    
 <div id="visualizationContainer">
 <svg id="svg1" style="margin: 0 auto; display: block;"></svg>
 <svg id="svg2" style="margin: 0 auto; display: block;"></svg>
@@ -94,7 +79,6 @@ d3.csv('data/pumps.csv', function(pumps){
 
 d3.csv('data/deaths_age_sex.csv', function(deaths){
   
-   // create a tooltip
    var Tooltip = d3.select("#visualizationContainer")
     .append("div")
     .style("opacity", 0)
@@ -105,7 +89,6 @@ d3.csv('data/deaths_age_sex.csv', function(deaths){
     .style("border-radius", "5px")
     .style("padding", "5px")
 
-  // Three function that change the tooltip when user hover / move / leave a cell
   var mouseover = function(d) {
     Tooltip
       .style("opacity", 1)
