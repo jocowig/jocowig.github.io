@@ -8,9 +8,7 @@
 
 <link href="../css/bootstrap.css" rel="stylesheet">
 <link href="../css/siteStyles.css" rel="stylesheet">
-<link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 
 </head>
 <body>
@@ -45,7 +43,7 @@
 <div class="container">
   <div class="row text-center">
     <div class="col-md-6 col-md-offset-3">Visualization of John Snow's Map</div>
-	<div id = "map" style = "width: 900px; height: 580px"></div>
+	<!-- <div id = "map" style = "width: 900px; height: 580px"></div>
 	<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <script>
 	 var londonLocation = {
@@ -60,29 +58,116 @@
 	 map.addLayer(layer);
 	 
 	 
-  </script>
-  <script src="https://d3js.org/d3.v5.js"></script>
+  </script> -->
+<div id="visualizationContainer">
 <svg id="svg1" style="margin: 0 auto; display: block;"></svg>
-<script type="text/javascript" src="data/streets.json"></script>
+<svg id="svg2" style="margin: 0 auto; display: block;"></svg>
+</div>
 <script>   
-
-d3.json('https://khreda.com/teaching/fall2021/H517/project1/cholera_data/streets.json')
-.then(streets => {
- let svg = d3.select('#svg1')
-        .attr('width', 400)
-        .attr('height', 400)
-        .style('background-color', 'black');
- for(var street in streets) {
+let svg = d3.select('#svg1')
+        .attr('width', 1000)
+        .attr('height', 1000)
+        .style('background-color', 'gray');
+ 
+d3.json('data/streets.json', function(streets){
+  for (var street = 0; street < streets.length; street++){
     svg.append('line')
-        .style("stroke", "lightgreen")
-        .style("stroke-width", 10)
-        .attr("x1", streets[street][0].x)
-        .attr("y1", streets[street][0].y)
-        .attr("x2", streets[street][1].x)
-        .attr("y2", streets[street][1].y);  
+        .style("stroke", "black")
+        .style("stroke-width", 1)
+        .attr("x1", streets[street][0].x*50)
+        .attr("y1", streets[street][0].y*50)
+        .attr("x2", streets[street][1].x*50)
+        .attr("y2", streets[street][1].y*50);  
 	}
 });	
-	
+
+d3.csv('data/pumps.csv', function(pumps){
+  for (var pump=0; pump < pumps.length; pump++) 
+  {svg.append('circle')
+  .attr('cx', pumps[pump]["x"]*50)
+  .attr('cy', pumps[pump]["y"]*50)
+  .attr('r', 5)
+  .attr('stroke', 'black')
+  .attr('fill', '#69a3b2')
+  .style("fill", "blue");}
+});
+
+d3.csv('data/deaths_age_sex.csv', function(deaths){
+  
+   // create a tooltip
+   var Tooltip = d3.select("#visualizationContainer")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+  // Three function that change the tooltip when user hover / move / leave a cell
+  var mouseover = function(d) {
+    Tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 1)
+  }
+  var mouseleave = function(d) {
+    Tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 0.8)
+  }
+
+  for (var death=0; death < deaths.length; death++) 
+  {
+    var gender = "Unknown";
+  if(deaths[death]["gender"]==0){
+    gender = "Male"
+  }  
+  else if(deaths[death]["gender"]==1){
+    gender = "Female"
+  }
+  var age = "Unknown"
+  if(deaths[death]["age"]==0){
+    age = "0-10 Years";}
+  else if(deaths[death]["age"]==1){
+    age = "11-20 Years";}
+  else if(deaths[death]["age"]==2){
+    age = "21-40 Years";}
+  else if(deaths[death]["age"]==3){
+    age = "41-60 Years";}
+  else if(deaths[death]["age"]==4){
+    age = "61-80 Years";}
+  else if(deaths[death]["age"]==5){
+    age = ">80 Years";}
+  svg.append('circle')
+  .attr('id', 'death_'+death)
+  .attr('cx', deaths[death]["x"]*50)
+  .attr('cy', deaths[death]["y"]*50)
+  .attr('r', 5)
+  .attr('stroke', 'black')
+  .attr('fill', '#69a3b2')
+  .style("fill", "yellow")
+  .attr('title',"test")
+  .on("mouseover", mouseover)
+  .on("mousemove", function() {
+    Tooltip
+      .html(gender+"<br>"+age)
+      .style("left", (d3.mouse(this)[0]) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px")
+  })
+  .on("mouseleave", mouseleave);
+}
+});
+
+let svg2 = d3.select('#svg2')
+        .attr('width', 1000)
+        .attr('height', 500)
+        .style('background-color', 'gray');
+
 </script>
 
   </div>
